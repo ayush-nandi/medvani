@@ -1,0 +1,162 @@
+{
+  "sessions": [
+    {
+      "id": "d6134ca9-145a-4d96-bb33-8d882ce676ca",
+      "user_id": "geI0chlkZIhTLAWZvUR6NRi1lGl2",
+      "title": "Improving Medical Record Keeping",
+      "updated_at": "2026-02-22T06:04:43.898445+00:00",
+      "messages": [
+        {
+          "at": "2026-02-22T06:04:43.682200+00:00",
+          "user": "\u09b9\u09cd\u09af\u09be\u0981 \u0995\u09bf \u09b9\u09b2\u09cb \u09b0\u09c7\u0995\u09b0\u09cd\u09a1\u09bf\u0982 \u0995\u09b0\u099b\u09bf\u09b8 \u09ad\u09be\u09b2\u09cb \u0995\u09b0\u09c7 \u0995\u09b0",
+          "assistant": "\u0986\u09aa\u09a8\u09bf \u0995\u09bf \u099c\u09bf\u099c\u09cd\u099e\u09be\u09b8\u09be \u0995\u09b0\u099b\u09c7\u09a8 \u09af\u09c7 \u0986\u09ae\u09bf \u0995\u09bf \u0986\u09ae\u09be\u09a6\u09c7\u09b0 \u0995\u09a5\u09cb\u09aa\u0995\u09a5\u09a8 \u09b8\u09c1\u09b0\u0995\u09cd\u09b7\u09bf\u09a4\u09ad\u09be\u09ac\u09c7 \u09b0\u09c7\u0995\u09b0\u09cd\u09a1 \u0995\u09b0\u099b\u09bf? \u0986\u09ae\u09bf \u0986\u09aa\u09a8\u09be\u0995\u09c7 \u0986\u09b6\u09cd\u09ac\u09b8\u09cd\u09a4 \u0995\u09b0\u09a4\u09c7 \u099a\u09be\u0987 \u09af\u09c7 \u0986\u09ae\u09be\u09a6\u09c7\u09b0 \u0995\u09a5\u09cb\u09aa\u0995\u09a5\u09a8 \u0995\u09c7\u09ac\u09b2\u09ae\u09be\u09a4\u09cd\u09b0 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u09be\u0997\u09a4 \u09a8\u09a5\u09bf\u0995\u09b0\u09a3 \u098f\u09ac\u0982 \u0989\u09a8\u09cd\u09a8\u09a4\u09bf\u09b0 \u0989\u09a6\u09cd\u09a6\u09c7\u09b6\u09cd\u09af\u09c7 \u09b0\u09c7\u0995\u09b0\u09cd\u09a1 \u0995\u09b0\u09be \u09b9\u099a\u09cd\u099b\u09c7\u0964 \u0986\u09aa\u09a8\u09be\u09b0 \u09ae\u09a4\u09cb \u09ac\u09cd\u09af\u09ac\u09b9\u09be\u09b0\u0995\u09be\u09b0\u09c0\u09a6\u09c7\u09b0 \u099c\u09a8\u09cd\u09af \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u09be \u09b8\u09b9\u09be\u09af\u09bc\u09a4\u09be \u09ac\u09c3\u09a6\u09cd\u09a7\u09bf \u0995\u09b0\u09be\u09b0 \u099c\u09a8\u09cd\u09af \u0986\u09ae\u09be\u09a6\u09c7\u09b0 \u0995\u09a5\u09cb\u09aa\u0995\u09a5\u09a8\u099f\u09bf \u09ac\u09c7\u09a8\u09be\u09ae\u09c0 \u098f\u09ac\u0982 \u09b8\u09ae\u09b7\u09cd\u099f\u09bf\u0997\u09a4 \u0995\u09b0\u09be \u09b9\u09ac\u09c7\u0964 \u0986\u09b0\u0993 \u09ac\u09cd\u09af\u0995\u09cd\u09a4\u09bf\u0997\u09a4 \u098f\u09ac\u0982 \u09aa\u09c1\u0999\u09cd\u0996\u09be\u09a8\u09c1\u09aa\u09c1\u0999\u09cd\u0996 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u09be \u09ae\u09c2\u09b2\u09cd\u09af\u09be\u09af\u09bc\u09a8\u09c7\u09b0 \u099c\u09a8\u09cd\u09af, \u0986\u09ae\u09bf \u09b8\u09b0\u09cd\u09ac\u09a6\u09be \u098f\u0995\u099c\u09a8 \u09b2\u09be\u0987\u09b8\u09c7\u09a8\u09cd\u09b8\u09aa\u09cd\u09b0\u09be\u09aa\u09cd\u09a4 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u0995\u09c7\u09b0 \u09b8\u09be\u09a5\u09c7 \u09aa\u09b0\u09be\u09ae\u09b0\u09cd\u09b6 \u0995\u09b0\u09be\u09b0 \u09aa\u09b0\u09be\u09ae\u09b0\u09cd\u09b6 \u09a6\u09bf\u0987\u0964 \u09a4\u09be\u09b0\u09be \u098f\u0995\u099f\u09bf \u09b6\u09be\u09b0\u09c0\u09b0\u09bf\u0995 \u09aa\u09b0\u09c0\u0995\u09cd\u09b7\u09be \u0995\u09b0\u09a4\u09c7 \u09aa\u09be\u09b0\u09c7 \u098f\u09ac\u0982 \u098f\u0995\u099f\u09bf \u09b8\u09a0\u09bf\u0995 \u09b0\u09cb\u0997\u09a8\u09bf\u09b0\u09cd\u09a3\u09af\u09bc \u098f\u09ac\u0982 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u09be \u09aa\u09b0\u09bf\u0995\u09b2\u09cd\u09aa\u09a8\u09be \u09aa\u09cd\u09b0\u09a6\u09be\u09a8\u09c7\u09b0 \u099c\u09a8\u09cd\u09af \u098f\u0995\u099f\u09bf \u09ac\u09bf\u09b8\u09cd\u09a4\u09c3\u09a4 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u09be \u0987\u09a4\u09bf\u09b9\u09be\u09b8 \u09a8\u09bf\u09a4\u09c7 \u09aa\u09be\u09b0\u09c7\u0964 \u0986\u09ae\u09be\u09a6\u09c7\u09b0 \u0995\u09a5\u09cb\u09aa\u0995\u09a5\u09a8\u099f\u09bf \u098f\u0987 \u09b0\u0995\u09ae \u099b\u09bf\u09b2: 1. \u09ac\u09cd\u09af\u09ac\u09b9\u09be\u09b0\u0995\u09be\u09b0\u09c0\u09b0 \u09aa\u09b0\u09bf\u099a\u09af\u09bc \u09b0\u0995\u09cd\u09b7\u09be \u0995\u09b0\u09be\u09b0 \u099c\u09a8\u09cd\u09af \u09ac\u09c7\u09a8\u09be\u09ae\u09c0 \u0995\u09b0\u09be \u09b9\u09af\u09bc\u09c7\u099b\u09c7\u0964 2. \u0985\u09ad\u09cd\u09af\u09a8\u09cd\u09a4\u09b0\u09c0\u09a3 \u0997\u09c1\u09a3\u09ae\u09be\u09a8 \u0989\u09a8\u09cd\u09a8\u09af\u09bc\u09a8\u09c7\u09b0 \u0989\u09a6\u09cd\u09a6\u09c7\u09b6\u09cd\u09af\u09c7 \u09b0\u09c7\u0995\u09b0\u09cd\u09a1 \u0995\u09b0\u09be \u09b9\u09af\u09bc\u09c7\u099b\u09c7\u0964 3. \u09ad\u09ac\u09bf\u09b7\u09cd\u09af\u09a4\u09c7\u09b0 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u09be \u09b8\u09b9\u09be\u09af\u09bc\u09a4\u09be \u099c\u09be\u09a8\u09be\u09a8\u09cb\u09b0 \u099c\u09a8\u09cd\u09af \u098f\u0995\u09a4\u09cd\u09b0\u09bf\u09a4 \u0995\u09b0\u09be \u09b9\u09af\u09bc\u09c7\u099b\u09c7\u0964 \u0986\u09ae\u09be\u09a6\u09c7\u09b0 \u0995\u09a5\u09cb\u09aa\u0995\u09a5\u09a8 \u099a\u09be\u09b2\u09bf\u09af\u09bc\u09c7 \u09af\u09c7\u09a4\u09c7 \u09a6\u09cd\u09ac\u09bf\u09a7\u09be \u0995\u09b0\u09ac\u09c7\u09a8 \u09a8\u09be, \u0986\u09ae\u09bf \u0986\u09aa\u09a8\u09be\u0995\u09c7 \u0995\u09bf\u09ad\u09be\u09ac\u09c7 \u0986\u09aa\u09a8\u09be\u0995\u09c7 \u09b8\u09be\u09b9\u09be\u09af\u09cd\u09af \u0995\u09b0\u09a4\u09c7 \u09aa\u09be\u09b0\u09bf \u09b8\u09c7 \u09ac\u09bf\u09b7\u09af\u09bc\u09c7 \u0986\u09b0\u0993 \u09a4\u09a5\u09cd\u09af \u09aa\u09cd\u09b0\u09a6\u09be\u09a8 \u0995\u09b0\u09ac\u0964 \u09ac\u09cd\u09af\u0995\u09cd\u09a4\u09bf\u0997\u09a4 \u09aa\u09b0\u09be\u09ae\u09b0\u09cd\u09b6 \u09ac\u09be \u098f\u0995\u099f\u09bf \u09a8\u09bf\u09b0\u09cd\u09a6\u09bf\u09b7\u09cd\u099f \u09b0\u09cb\u0997 \u09a8\u09bf\u09b0\u09cd\u09a3\u09af\u09bc\u09c7\u09b0 \u099c\u09a8\u09cd\u09af, \u0985\u09a8\u09c1\u0997\u09cd\u09b0\u09b9 \u0995\u09b0\u09c7 \u0986\u09aa\u09a8\u09be\u09b0 \u09aa\u09cd\u09b0\u09be\u09a5\u09ae\u09bf\u0995 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u0995\u09c7\u09b0 \u09b8\u0999\u09cd\u0997\u09c7 \u098f\u0995\u099f\u09bf \u0985\u09cd\u09af\u09be\u09aa\u09af\u09bc\u09c7\u09a8\u09cd\u099f\u09ae\u09c7\u09a8\u09cd\u099f \u09a8\u09bf\u09b0\u09cd\u09a7\u09be\u09b0\u09a3 \u0995\u09b0\u09c1\u09a8\u0964"
+        }
+      ]
+    },
+    {
+      "id": "49cb40bc-af3e-47cc-9ca7-13d2e12b745f",
+      "user_id": "geI0chlkZIhTLAWZvUR6NRi1lGl2",
+      "title": "\u0906\u092a \u0915\u094c\u0928 \u0939\u094b?",
+      "updated_at": "2026-02-22T06:00:05.960972+00:00",
+      "messages": [
+        {
+          "at": "2026-02-22T05:59:27.095031+00:00",
+          "user": "\u0906\u092a \u0915\u094c\u0928 \u0939\u094b?",
+          "assistant": "LLM is not initialized. Status: missing_groq_sdk_or_wrong_python_env. Python: C:\\Python314\\python.exe. Ensure backend/.env has GROQ_API_KEY, Groq SDK is installed in the same Python environment, and restart backend."
+        },
+        {
+          "at": "2026-02-22T06:00:05.960972+00:00",
+          "user": "\u0906\u092a \u0915\u094c\u0928 \u0939\u094b?",
+          "assistant": "Hello, I'm MedVani, a medical support assistant. I'm here to provide general medical information and guidance to help you make informed decisions about your health. Please note that I'm not a substitute for a licensed physician, and I strongly recommend consulting a doctor for personalized advice and care.\n\nIf you have any specific health concerns, symptoms, or questions, feel free to ask, and I'll do my best to provide you with general information and guidance."
+        }
+      ]
+    },
+    {
+      "id": "0774a9ac-af53-4c49-82ce-14a495d9a262",
+      "user_id": "geI0chlkZIhTLAWZvUR6NRi1lGl2",
+      "title": "Symptoms of Colon Cancer",
+      "updated_at": "2026-02-22T05:39:06.489482+00:00",
+      "messages": [
+        {
+          "at": "2026-02-22T05:38:43.198278+00:00",
+          "user": "what are symptoms of colon cancer",
+          "assistant": "Colon cancer, also known as colorectal cancer, can present with a range of non-specific and potentially confusing symptoms. Potential indications suggest people may experience:\n\n1. **Blood in stool**: Visible or occult blood in the stool, which may appear as red or black spots, or be invisible but detected through tests.\n2. **Changes in bowel habits**: Diarrhea or constipation, abdominal pain, or feeling of incomplete evacuation after a bowel movement.\n3. **Weight loss and fatigue**: Unexplained weight loss, weakness, or fatigue due to potential tumor growth or related nutritional deficiencies.\n4. **Abdominal discomfort**: Persistent pain, cramping, or bloating in the abdominal area.\n5. **Weakness and anemia**: Feeling weak, pale, or short of breath due to anemia, which may be caused by occult blood loss.\n\nIt's essential to note that many of these symptoms can be caused by other conditions. Colon cancer symptoms often do not appear until the disease is in its advanced stages.\n\nIf you're experiencing any of these symptoms or have concerns about your colon health, it's crucial to seek medical attention from a licensed physician. They will perform a comprehensive examination, including diagnostic tests, to rule out other potential causes and determine the best course of action.\n\nTo minimize the risk of colon cancer, it's essential to follow recommended screening guidelines, which usually start at age 50 for average-risk individuals. These guidelines may vary depending on individual risk factors, family history, and other medical conditions.\n\nSeek medical attention if you experience any of the above symptoms or if you're due for a colon cancer screening.\n\n(Translation into other languages can be provided upon request)"
+        },
+        {
+          "at": "2026-02-22T05:39:06.489482+00:00",
+          "user": "answer in bengali",
+          "assistant": "\u098f\u0995\u099c\u09a8 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u09be \u09b8\u09b9\u09be\u09af\u09bc\u09a4\u09be \u09b8\u09b9\u0995\u09be\u09b0\u09c0 \u09b9\u09bf\u09b8\u09c7\u09ac\u09c7, \u098f\u0995\u099c\u09a8 \u09b2\u09be\u0987\u09b8\u09c7\u09a8\u09cd\u09b8\u09aa\u09cd\u09b0\u09be\u09aa\u09cd\u09a4 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u0995\u09c7\u09b0 \u0995\u09be\u099b \u09a5\u09c7\u0995\u09c7 \u09ac\u09cd\u09af\u0995\u09cd\u09a4\u09bf\u0997\u09a4 \u09aa\u09b0\u09be\u09ae\u09b0\u09cd\u09b6 \u09a8\u09c7\u0993\u09af\u09bc\u09be\u09b0 \u0997\u09c1\u09b0\u09c1\u09a4\u09cd\u09ac\u09c7\u09b0 \u0989\u09aa\u09b0 \u099c\u09cb\u09b0 \u09a6\u09c7\u0993\u09af\u09bc\u09be \u0989\u099a\u09bf\u09a4\u0964 \u0986\u09aa\u09a8\u09bf \u0995\u09cb\u09a8 \u0995\u09cb\u09a8 \u0989\u09aa\u09b8\u09b0\u09cd\u0997 \u09ac\u09be \u0989\u09a6\u09cd\u09ac\u09c7\u0997\u09c7\u09b0 \u09ac\u09bf\u09b7\u09af\u09bc\u09c7 \u0986\u09b2\u09cb\u099a\u09a8\u09be \u0995\u09b0\u09a4\u09c7 \u099a\u09be\u09a8? \u098f\u099f\u09bf \u0986\u09ae\u09be\u0995\u09c7 \u0986\u09b0\u0993 \u09b8\u09a0\u09bf\u0995 \u098f\u09ac\u0982 \u09b8\u09b9\u09be\u09af\u09bc\u0995 \u09a4\u09a5\u09cd\u09af \u09aa\u09cd\u09b0\u09a6\u09be\u09a8 \u0995\u09b0\u09a4\u09c7 \u09b8\u09be\u09b9\u09be\u09af\u09cd\u09af \u0995\u09b0\u09ac\u09c7\u0964 \u0985\u09a8\u09c1\u0997\u09cd\u09b0\u09b9 \u0995\u09b0\u09c7 \u09b2\u0995\u09cd\u09b7\u09cd\u09af \u09b0\u09be\u0996\u09ac\u09c7\u09a8 \u09af\u09c7, \u0986\u09ae\u09bf \u0986\u09aa\u09a8\u09be\u09b0 \u09aa\u09cd\u09b0\u09b6\u09cd\u09a8\u0997\u09c1\u09b2\u09bf\u09b0 \u09b8\u09ae\u09be\u09a7\u09be\u09a8 \u0995\u09b0\u09be\u09b0 \u099c\u09a8\u09cd\u09af \u09af\u09a5\u09be\u09b8\u09be\u09a7\u09cd\u09af \u099a\u09c7\u09b7\u09cd\u099f\u09be \u0995\u09b0\u09ac, \u09a4\u09ac\u09c7 \u0986\u09ae\u09bf \u098f\u0995\u099c\u09a8 \u09b2\u09be\u0987\u09b8\u09c7\u09a8\u09cd\u09b8\u09aa\u09cd\u09b0\u09be\u09aa\u09cd\u09a4 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u0995 \u09a8\u0987 \u098f\u09ac\u0982 \u09aa\u09c7\u09b6\u09be\u09a6\u09be\u09b0 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u09be\u0997\u09a4 \u09aa\u09b0\u09be\u09ae\u09b0\u09cd\u09b6\u09c7\u09b0 \u09ac\u09bf\u0995\u09b2\u09cd\u09aa \u09b9\u09bf\u09b8\u09be\u09ac\u09c7 \u09ac\u09bf\u09ac\u09c7\u099a\u09bf\u09a4 \u09b9\u0993\u09af\u09bc\u09be \u0989\u099a\u09bf\u09a4 \u09a8\u09af\u09bc\u0964 \u0989\u09aa\u09b0\u09a8\u09cd\u09a4\u09c1, \u0986\u09aa\u09a8\u09be\u09b0 \u09af\u09a6\u09bf \u0995\u09cb\u09a8\u0993 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u09be \u09b8\u0982\u0995\u09cd\u09b0\u09be\u09a8\u09cd\u09a4 \u0987\u09a4\u09bf\u09b9\u09be\u09b8, \u09aa\u09c2\u09b0\u09cd\u09ac-\u09ac\u09bf\u09a6\u09cd\u09af\u09ae\u09be\u09a8 \u0985\u09ac\u09b8\u09cd\u09a5\u09be, \u0985\u09a5\u09ac\u09be \u09a8\u09bf\u09b0\u09cd\u09a6\u09bf\u09b7\u09cd\u099f \u0993\u09b7\u09c1\u09a7-\u09b8\u09ae\u09cd\u09aa\u09b0\u09cd\u0995\u09bf\u09a4 \u0989\u09a6\u09cd\u09ac\u09c7\u0997 \u09a5\u09be\u0995\u09c7, \u09a4\u09ac\u09c7 \u09b8\u09a0\u09bf\u0995 \u09ae\u09c2\u09b2\u09cd\u09af\u09be\u09af\u09bc\u09a8 \u098f\u09ac\u0982 \u09a8\u09bf\u09b0\u09cd\u09a6\u09c7\u09b6\u09a8\u09be\u09b0 \u099c\u09a8\u09cd\u09af \u0986\u09aa\u09a8\u09be\u09b0 \u09b8\u09cd\u09ac\u09be\u09b8\u09cd\u09a5\u09cd\u09af\u09b8\u09c7\u09ac\u09be \u09aa\u09cd\u09b0\u09a6\u09be\u09a8\u0995\u09be\u09b0\u09c0\u09b0 \u09b8\u09be\u09a5\u09c7 \u098f\u0987 \u09a4\u09a5\u09cd\u09af \u09ad\u09be\u0997 \u0995\u09b0\u09c7 \u09a8\u09c7\u0993\u09af\u09bc\u09be \u0997\u09c1\u09b0\u09c1\u09a4\u09cd\u09ac\u09aa\u09c2\u09b0\u09cd\u09a3\u0964 \u09a8\u09bf\u09b0\u09cd\u09a6\u09bf\u09b7\u09cd\u099f \u0995\u09cb\u09a8\u09cb \u09ac\u09bf\u09b7\u09af\u09bc \u0985\u09a5\u09ac\u09be \u09b8\u09ae\u09b8\u09cd\u09af\u09be \u09a8\u09bf\u09af\u09bc\u09c7 \u0986\u09b2\u09cb\u099a\u09a8\u09be \u0995\u09b0\u09a4\u09c7 \u0987\u099a\u09cd\u099b\u09c1\u0995?"
+        }
+      ]
+    },
+    {
+      "id": "193f1750-c936-43bc-8620-0d96c8c55c08",
+      "user_id": "optL1o1QJ1XjYgMuouurXyKXtta2",
+      "title": "Acquired Immune Deficiency Syndrome",
+      "updated_at": "2026-02-17T18:34:58.182703+00:00",
+      "messages": [
+        {
+          "at": "2026-02-17T18:34:58.005603+00:00",
+          "user": "what is aids",
+          "assistant": "Hello, I'm MedVani, a medical support assistant. I'll help you understand what AIDS is, but first, please note that a comprehensive discussion about this condition requires an in-person consultation with a licensed physician for accurate diagnosis and treatment.\n\nAIDS, which stands for Acquired Immune Deficiency Syndrome, is a condition characterized by severe damage to the immune system, making it harder for the body to fight off infections and diseases. Potential indications suggest that AIDS is the final stage of HIV (Human Immunodeficiency Virus) infection, where the virus has weakened the immune system to the point where it can't fight off opportunistic infections and certain cancers.\n\nSymptoms of AIDS can be nonspecific and may resemble those of other conditions. They may include persistent fever, unexplained weight loss, swollen lymph nodes, fatigue, and recurrent infections, among others.\n\nIt's crucial that you consult a healthcare professional for proper evaluation, diagnosis, and management of any potential health issues. They will assess your medical history, perform various tests (like blood tests), and determine the best course of action.\n\nIn the meantime, it's essential to prioritize your health by maintaining good hygiene, practicing safe sex, and avoiding sharing personal items to prevent potential infections.\n\nFor accurate and personalized information, please consult a licensed physician or a medical professional. They will provide you with the necessary guidance and support to manage any potential health concerns.\n\n(Note: For users with a different language preference, please let me know, and I'll attempt to provide a brief response, emphasizing doctor-referral.)"
+        }
+      ]
+    },
+    {
+      "id": "f767c381-f43a-4600-a42d-c822bce7667d",
+      "user_id": "geI0chlkZIhTLAWZvUR6NRi1lGl2",
+      "title": "Rhino Virus Disease",
+      "updated_at": "2026-02-17T18:33:27.960087+00:00",
+      "messages": [
+        {
+          "at": "2026-02-17T18:33:27.783275+00:00",
+          "user": "whta is rihno virus",
+          "assistant": "As a medical support assistant, I'd like to clarify that you're likely referring to the Rhinovirus. \n\nRhinovirus is a common virus that causes the common cold. Potential indications suggest that it triggers the nasal passages to become inflamed, resulting in symptoms such as:\n\n- Runny nose\n- Cough\n- Sore throat\n- Fatigue\n- Headache\n\nIt's essential to note that the Rhinovirus is highly contagious and spreads mainly through:\n\n- Direct contact with an infected person\n- Touching surfaces with the virus and then touching your eyes, nose, or mouth\n\nPlease consult a licensed physician for a proper evaluation and guidance on treatment, as they can provide personalized advice based on your specific situation.\n\nIn the meantime, some general preventive measures may help reduce the risk of infection, such as:\n\n- Frequently washing your hands with soap and water\n- Staying at least 3 feet away from anyone with symptoms\n- Avoiding close contact with people who have a cold or flu-like symptoms\n- Practicing good hygiene by covering your mouth and nose when sneezing or coughing\n\nConsult a licensed physician before starting any treatment or medication, and prioritize their recommendation for the best possible care."
+        }
+      ]
+    },
+    {
+      "id": "10b32f4a-f37d-4834-81ec-0632216285e8",
+      "user_id": "geI0chlkZIhTLAWZvUR6NRi1lGl2",
+      "title": "Assessment Dependency In Symptoms",
+      "updated_at": "2026-02-17T18:33:00.233683+00:00",
+      "messages": [
+        {
+          "at": "2026-02-17T18:32:35.824109+00:00",
+          "user": "what is adis",
+          "assistant": "Hi, I'm MedVani. I'd be happy to help you with your query.\n\nHowever, I couldn't find any relevant medical information on \"adis.\" Could you please provide more context or clarify what you meant by \"adis\"? Was it a disease, a symptom, a medical term, or something else? \n\nPlease note that as a medical support assistant, I can only provide broad, non-specific guidance. For accurate diagnosis and treatment, it's essential to consult a licensed physician in person.\n\nIf you could provide more information or clarify your question, I'd be happy to help."
+        },
+        {
+          "at": "2026-02-17T18:33:00.233683+00:00",
+          "user": "what is hiv",
+          "assistant": "Hello, I'm MedVani, a medical support assistant. I'll provide general information on a topic while emphasizing the importance of consulting a licensed physician for personalized advice.\n\nHIV (Human Immunodeficiency Virus) is a viral infection that attacks the body's immune system, specifically targeting CD4 cells (T cells), which help the body fight infections. Potential indications suggest that if left untreated, HIV can progress to AIDS (Acquired Immunodeficiency Syndrome), a condition where the immune system is severely weakened.\n\n**Common symptoms:**\n\n* Fever\n* Fatigue\n* Weight loss\n* Swollen lymph nodes\n* Recurring infections (such as pneumonia or tuberculosis)\n* Diarrhea\n* Skin rashes\n\n**Transmission:**\n\n* Hugging, kissing, and other physical contact\n* Sharing needles or syringes\n* Mother to child during pregnancy, childbirth, or breastfeeding\n* Blood transfusions (from an infected donor)\n* Exposure to infected bodily fluids (such as semen, vaginal fluids, or breast milk)\n\n**Prevention:**\n\n* PrEP (Pre-Exposure Prophylaxis) medication for individuals at high risk\n* Condom use for vaginal, anal, or oral sex\n* HIV testing for early detection and prompt treatment\n* Abstinence or monogamy\n\n**Testing:**\n\n* Blood tests (such as the ELISA or Western blot test) to detect HIV antibodies or antigens\n* Rapid tests for quick results\n* Viral load tests to measure the amount of HIV in the blood\n\n**Treatment:**\n\n* Combination antiretroviral therapy (ART) to suppress the virus and prevent transmission\n* Boosting the immune system with immunomodulators\n\n**Importance of seeking medical care:**\n\nIf you suspect you or a loved one may have been exposed to HIV, or are experiencing symptoms, **consult a licensed physician immediately**. They will help assess your situation, provide a proper diagnosis, and recommend the best course of action.\n\nPlease consult a local healthcare provider or a registered medical professional for accurate information and treatment tailored to your specific needs.\n\nNext, I will be happy to assist you in other languages if needed."
+        }
+      ]
+    },
+    {
+      "id": "d8d2d09e-4af8-4acc-99a9-b6779d0ead67",
+      "title": "Rhinovirus Infection Information",
+      "updated_at": "2026-02-17T18:18:33.308627+00:00",
+      "messages": [
+        {
+          "at": "2026-02-17T18:18:33.128868+00:00",
+          "user": "what is rihnovirus",
+          "assistant": "Based on the context, I couldn't find any direct match for 'rihnovirus.' It's possible that it might be a misspelling or a less common term. I'd like to suggest a few possibilities.\n\nPotential indications suggest that you might be referring to 'Respiratory Influenza Virus' or 'Rhinovirus.' However, 'Rhinovirus' is a more likely match.\n\nRhinovirus is a type of virus that causes the common cold. It is highly contagious and can be spread through direct contact with an infected person or by touching surfaces that have the virus on them.\n\nIf you are experiencing symptoms such as:\n\n- Runny nose\n- Sneezing\n- Coughing\n- Sore throat\n- Headache\n- Fatigue\n\nI recommend consulting a licensed physician, especially if you are experiencing any of the following:\n\n- Severe symptoms\n- Fever that lasts for more than 3-4 days\n- Difficulty breathing\n- Coughing up blood or yellow or green mucus\n\nPlease note that this is not a substitute for professional medical advice, and I strongly advise in-person consultation with a licensed physician for accurate diagnosis and treatment. They can help determine the best course of action and provide guidance on symptom management and prevention of the common cold.\n\nFor safe alternative management, I can provide general guidance on prevention and symptom relief:\n\n- Practice good hygiene, such as washing your hands frequently with soap and water.\n- Use tissues to cover your nose and mouth when coughing or sneezing.\n- Stay hydrated by drinking plenty of fluids.\n- Consider over-the-counter medications such as pain relievers and decongestants.\n\nPlease consult a licensed physician for personalized advice and guidance."
+        }
+      ]
+    },
+    {
+      "id": "33542b4b-c6a8-40d3-9748-c1d4f1b1e571",
+      "title": "Acquired Immune Deficiency",
+      "updated_at": "2026-02-17T18:17:42.095327+00:00",
+      "messages": [
+        {
+          "at": "2026-02-17T18:17:41.900477+00:00",
+          "user": "what is aids",
+          "assistant": "I'll provide information on AIDS.\n\nAIDS (Acquired Immunodeficiency Syndrome) is a condition that results from a severe immune system impairment, primarily caused by the Human Immunodeficiency Virus (HIV). Potential indications suggest that AIDS is a chronic and life-threatening disease if left untreated.\n\nPeople with HIV may experience a range of symptoms, including:\n\n- Recurring fevers\n- Weight loss\n- Enlarged lymph nodes\n- Frequent or severe infections\n- Prolonged periods of illness\n\nIf you are experiencing any of these symptoms, I strongly advise consulting a licensed physician for proper evaluation and diagnosis.\n\nFor those who are HIV-negative but want to learn more about prevention, safe sex practices, HIV testing, and post-exposure prophylaxis (PEP) can be explored through online resources and health centers.\n\nIt is essential to consult a healthcare professional for personalized guidance and care.\n\nFor multilingual support, I'll also provide information in other languages you may require:\n\nSpanish: El SIDA (Sindrome de inmunodeficiencia adquirida) es una condici\u00f3n resultante de una grave disminuci\u00f3n del sistema inmune, principalmente causada por el virus de la inmunodeficiencia humana (VIH). Indicaciones potenciales sugieren que el SIDA es una enfermedad cr\u00f3nica y letal si no se trata.\n\nFrench: Le SID (Sindrome d'Immunodeficienci\u00e9 Acquir\u00e9) est une condition r\u00e9sultant d'une s\u00e9v\u00e8re alt\u00e9ration du syst\u00e8me immunitaire, principalement caus\u00e9 par le Virus de l'Immunod\u00e9ficience Humaine (VIH). Les indications potentielles sugg\u00e8rent que le SID est une maladie chronique et mortelle si elle n'est pas trait\u00e9e.\n\nPlease note that my responses are for informational purposes only, and I always recommend consulting a licensed healthcare professional for personalized guidance and care."
+        }
+      ]
+    },
+    {
+      "id": "86405d57-af7c-4453-9f1b-0f4f80a5c0ec",
+      "title": "Acquired Immune Deficiency",
+      "updated_at": "2026-02-15T18:41:52.457300+00:00",
+      "messages": [
+        {
+          "at": "2026-02-15T18:41:52.251549+00:00",
+          "user": "what is aids",
+          "assistant": "Welcome to MedVani. I'll provide general information about AIDS while emphasizing the importance of consulting a licensed physician for personalized assistance.\n\n**What is AIDS?**\n\nAIDS stands for Acquired Immune Deficiency Syndrome. It is a condition that results from the Human Immunodeficiency Virus (HIV) attacking the body's immune system. If left untreated, HIV can progress to AIDS, making the body vulnerable to various infections and diseases.\n\n**Potential indications:**\n\nIndividuals with AIDS may experience a range of symptoms, including:\n\n- Recurring infections (e.g., pneumonia, tuberculosis)\n- Wasting syndrome (muscle and weight loss)\n- Skin lesions, rashes, or lesions\n- Swollen lymph nodes\n- Enlarged liver or spleen\n- Memory loss, confusion, or difficulty concentrating\n\n**Prevention and treatment:**\n\n- HIV prevention: Use condoms consistently and correctly, or consider pre-exposure prophylaxis (PrEP) under a doctor's guidance.\n- HIV treatment: Antiretroviral therapy (ART) can manage HIV and prevent progression to AIDS. Consult a doctor for ART options.\n\n**Seek medical attention:**\n\nIf you suspect you might have been exposed to HIV or are experiencing symptoms related to AIDS, seek immediate medical attention from a licensed physician. Early diagnosis and treatment can significantly improve outcomes.\n\n**Additional support:**\n\nMedVani is not a substitute for professional medical advice. Please consult a licensed physician for personalized guidance and care. If you're struggling to find a doctor or need further assistance, consider reaching out to your local health department or a nearby hospital for help.\n\n(Translated advice based on user input and preference may also be available upon request.)"
+        }
+      ]
+    },
+    {
+      "id": "41a46120-cf1c-4855-b8a7-222250bb7c2c",
+      "title": "what is blackhole",
+      "updated_at": "2026-02-15T18:25:59.435800+00:00",
+      "messages": [
+        {
+          "at": "2026-02-15T18:25:59.435800+00:00",
+          "user": "what is blackhole",
+          "assistant": "I'll respond as MedVani. However, I couldn't find any information linking 'black hole' to a medical condition. I'm assuming you might be asking about black hole in a different context. A black hole is a term often used to describe a cosmic phenomenon in space. However, I will respond with caution and suggest seeking professional guidance if any medical context is involved.\n\nA black hole is a region in space where the gravitational pull is so strong that nothing, including light, can escape. This is not a medical term or condition. If you are experiencing any unusual symptoms or health concerns, I recommend consulting a licensed physician in person.\n\nPlease clarify if 'blackhole' has a specific context or medical relation you'd like to inquire about."
+        }
+      ]
+    },
+    {
+      "id": "bd11a9f1-a8dd-4911-a2d1-abfbdc2cf281",
+      "title": "what is hepatitis b",
+      "updated_at": "2026-02-15T18:42:25.015920+00:00",
+      "messages": [
+        {
+          "at": "2026-02-15T18:18:39.907357+00:00",
+          "user": "what is hepatitis b",
+          "assistant": "Hepatitis B is a viral infection caused by the Hepatitis B virus (HBV). It primarily affects the liver and can lead to various symptoms and health issues if left untreated or not managed properly.\n\nPotential indications suggest that Hepatitis B can be transmitted through bodily fluids, including blood, semen, and other bodily secretions. It's typically spread through:\n\n- Close contact with an infected person, such as through sharing needles or having unprotected sex\n- Mother to child transmission during childbirth\n- Blood transfusions or organ transplants from an infected donor\n\nCommon symptoms of Hepatitis B can include:\n\n- Fatigue\n- Loss of appetite\n- Abdominal pain\n- Nausea and vomiting\n- Dark urine\n- Pale or clay-colored stools\n\nIf you're experiencing any of these symptoms, it's essential to consult a licensed physician as soon as possible for a proper evaluation and guidance.\n\nIn terms of treatment, your doctor may recommend antiviral medications, such as entecavir (Schedule X), to help manage and prevent the progression of the disease. However, I must emphasize that I'm not authorized to provide dosage instructions for Schedule H/X medications.\n\nInstead, I can offer guidance on safe alternatives. For instance, antiviral medications like tenofovir or lamivudine can be effective in managing Hepatitis B, but it's crucial to follow your doctor's advice and recommended dosages.\n\nTo ensure the best possible outcome, I strongly advise scheduling an in-person consultation with a licensed physician who can assess your condition, provide a proper diagnosis, and recommend an effective treatment plan tailored to your specific needs.\n\nPlease schedule a consultation with your primary care physician or contact the nearest hospital for a prompt evaluation and guidance."
+        },
+        {
+          "at": "2026-02-15T18:42:25.015920+00:00",
+          "user": "how to cure",
+          "assistant": "As a medical support assistant, I'll provide a general response. However, please note that a specific diagnosis or a personalized treatment plan requires an in-person consultation with a licensed physician.\n\nTo better understand your concern, could you provide more details about how you're feeling or what you're referring to by \"cure\"? Are you experiencing any symptoms or health issues?\n\nOnce we have more information, I'll be happy to offer general guidance and suggest potential next steps."
+        }
+      ]
+    }
+  ]
+}
