@@ -103,6 +103,7 @@ export default function ChatInterface() {
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const speechRef = useRef<InstanceType<SpeechRecognitionCtor> | null>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
   const [input, setInput] = useState("");
   const [media, setMedia] = useState<MediaAttachment[]>([]);
   const [loading, setLoading] = useState(false);
@@ -150,6 +151,10 @@ export default function ChatInterface() {
     textareaRef.current.style.height = "0px";
     textareaRef.current.style.height = `${Math.min(180, textareaRef.current.scrollHeight)}px`;
   }, [input]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
   async function loadSessions(uid: string) {
     try {
@@ -484,7 +489,7 @@ export default function ChatInterface() {
 
   function renderInputBar() {
     return (
-      <div className="mx-auto w-full max-w-3xl rounded-full border border-zinc-700 bg-[#2b2b2b] px-3 py-2 shadow-lg shadow-black/20">
+      <div className="mx-auto w-full max-w-3xl rounded-2xl border border-zinc-700/60 bg-[#1c1c1c]/95 px-3 py-2 shadow-xl shadow-black/30 backdrop-blur-sm">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <button
@@ -600,10 +605,11 @@ export default function ChatInterface() {
                 className="fixed inset-y-0 left-0 z-30 w-64 border-r border-zinc-800 bg-[#1e1e1e] md:absolute"
               >
                 <div className="border-b border-zinc-800 p-3">
+                  <p className="mb-3 px-1 text-xs font-semibold uppercase tracking-widest text-zinc-600">History</p>
                   <button
                     type="button"
                     onClick={createSession}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-3 py-2 text-sm font-semibold text-black hover:bg-emerald-400"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-3 py-2 text-sm font-semibold text-black transition-colors hover:bg-emerald-400"
                   >
                     <Plus size={16} suppressHydrationWarning />
                     New Chat
@@ -613,8 +619,8 @@ export default function ChatInterface() {
                   {sessions.map((session) => (
                     <div
                       key={session.id}
-                      className={`group mb-1 flex items-center justify-between rounded-lg px-2 py-2 ${
-                        session.id === activeSessionId ? "bg-zinc-700/70" : "hover:bg-zinc-800/70"
+                      className={`group mb-1 flex items-center justify-between rounded-lg px-2 py-2 transition-colors duration-150 ${
+                        session.id === activeSessionId ? "bg-zinc-700/50 ring-1 ring-zinc-600/30" : "hover:bg-zinc-800/50"
                       }`}
                     >
                       <button
@@ -722,6 +728,23 @@ export default function ChatInterface() {
                     Your personalized health chatbot
                   </p>
                   <div className="mt-8 w-full">{renderInputBar()}</div>
+                  <div className="mt-5 flex flex-wrap justify-center gap-2">
+                    {[
+                      "What are symptoms of diabetes?",
+                      "How to manage high blood pressure?",
+                      "What foods boost immunity?",
+                      "Explain my blood test results",
+                    ].map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        type="button"
+                        onClick={() => setInput(suggestion)}
+                        className="rounded-full border border-zinc-700/60 bg-zinc-800/50 px-4 py-2 text-sm text-zinc-400 transition-all duration-200 hover:border-emerald-500/40 hover:bg-zinc-800 hover:text-zinc-200"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
                 </motion.div>
               ) : (
                 <motion.div
@@ -733,8 +756,14 @@ export default function ChatInterface() {
                 >
                   {messages.map((m, idx) =>
                     m.role === "user" ? (
-                      <div key={`${m.role}-${idx}`} className="flex justify-end">
-                        <div className="max-w-[80%] rounded-2xl bg-[#303030] px-4 py-3 text-sm text-zinc-100">
+                      <motion.div
+                        key={`${m.role}-${idx}`}
+                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ duration: 0.22, ease: "easeOut" }}
+                        className="flex justify-end"
+                      >
+                        <div className="max-w-[80%] rounded-2xl bg-[#2d2d2d] px-4 py-3 text-sm text-zinc-100 shadow-sm">
                           {m.media && m.media.length > 0 && (
                             <div className="mb-3 grid gap-2">
                               {m.media.map((item, mIdx) => (
@@ -757,26 +786,49 @@ export default function ChatInterface() {
                           )}
                           <p className="whitespace-pre-wrap">{m.text}</p>
                         </div>
-                      </div>
+                      </motion.div>
                     ) : (
-                      <div key={`${m.role}-${idx}`} className="flex items-start gap-3">
-                        <div className="mt-1 rounded-full bg-emerald-500/15 p-2 text-emerald-400">
+                      <motion.div
+                        key={`${m.role}-${idx}`}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.22, ease: "easeOut" }}
+                        className="flex items-start gap-3"
+                      >
+                        <div className="mt-1 shrink-0 rounded-full bg-emerald-500/15 p-2 text-emerald-400">
                           <MessageCircleHeart size={16} suppressHydrationWarning />
                         </div>
                         <p className="max-w-[85%] whitespace-pre-wrap text-sm leading-relaxed text-zinc-100">
                           {m.text}
                         </p>
-                      </div>
+                      </motion.div>
                     ),
                   )}
-                  {loading && <p className="text-sm text-amber-400">Analyzing...</p>}
+                  {loading && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex items-center gap-3"
+                    >
+                      <div className="mt-1 shrink-0 rounded-full bg-emerald-500/15 p-2 text-emerald-400">
+                        <MessageCircleHeart size={16} suppressHydrationWarning />
+                      </div>
+                      <div className="flex items-center gap-1.5 rounded-2xl bg-[#1e1e1e] px-4 py-3">
+                        <span className="typing-dot" />
+                        <span className="typing-dot" />
+                        <span className="typing-dot" />
+                      </div>
+                    </motion.div>
+                  )}
+                  <div ref={bottomRef} className="h-1" />
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
           {!isLanding && (
-            <div className="sticky bottom-0 z-20 border-t border-zinc-800/50 bg-gradient-to-t from-[#121212] via-[#121212] to-transparent px-4 py-3 md:px-8">
+            <div className="sticky bottom-0 z-20 border-t border-zinc-800/40 bg-gradient-to-t from-[#121212] via-[#121212]/96 to-transparent px-4 py-4 md:px-8">
               {renderInputBar()}
             </div>
           )}

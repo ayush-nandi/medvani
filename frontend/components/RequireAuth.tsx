@@ -27,8 +27,15 @@ export default function RequireAuth({ children }: { children: ReactNode }) {
 
   if (checking) {
     return (
-      <div className="flex h-[100dvh] items-center justify-center bg-[#121212]">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
+      <div className="flex h-[100dvh] flex-col items-center justify-center gap-5 bg-[#121212]">
+        <span className="bg-gradient-to-r from-white to-emerald-300 bg-clip-text text-2xl font-bold tracking-tight text-transparent">
+          MedVani
+        </span>
+        <div className="flex items-center gap-1.5">
+          <span className="typing-dot" />
+          <span className="typing-dot" />
+          <span className="typing-dot" />
+        </div>
       </div>
     );
   }
