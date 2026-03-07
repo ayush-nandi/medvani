@@ -1,5 +1,4 @@
 import base64
-import json
 import importlib
 import logging
 import os
@@ -32,6 +31,25 @@ try:  # pragma: no cover
     load_dotenv = getattr(_dotenv_module, "load_dotenv", None)
 except ModuleNotFoundError:  # pragma: no cover
     load_dotenv = None
+
+try:  # pragma: no cover
+    firebase_admin = importlib.import_module("firebase_admin")
+    firebase_credentials = importlib.import_module("firebase_admin.credentials")
+    firebase_firestore = importlib.import_module("firebase_admin.firestore")
+except ModuleNotFoundError:  # pragma: no cover
+    firebase_admin = None
+    firebase_credentials = None
+    firebase_firestore = None
+except Exception:  # pragma: no cover
+    firebase_admin = None
+    firebase_credentials = None
+    firebase_firestore = None
+
+try:  # pragma: no cover
+    _firestore_query_module = importlib.import_module("google.cloud.firestore_v1.base_query")
+    FieldFilter = getattr(_firestore_query_module, "FieldFilter", None)
+except Exception:  # pragma: no cover
+    FieldFilter = None
 
 if load_dotenv:
     # Always load env from backend/.env, independent of current working directory.
@@ -105,7 +123,7 @@ MEDICAL_SAFETY_PROMPT = (
     "You may explain medicine purpose, common side effects, contraindications, and interactions at a high level, but do not provide restricted dosage instructions. "
     "Keep reasoning concise and clinically grounded in retrieved context."
 )
-SESSIONS_FILE = Path(__file__).resolve().with_name("sessions.json")
+DEFAULT_FIREBASE_SERVICE_ACCOUNT = Path(__file__).resolve().with_name("firebase_service_account.json")
 
 LANGUAGE_CODE_MAP = {
     "en": "en-IN",
@@ -219,150 +237,234 @@ class MedVaniService:
         self.vector = VectorService()
         self.llm = self._init_groq()
         self.sarvam = self._init_sarvam()
+        self.firestore = self._init_firestore()
+        self.sessions_backend = "firestore"
         self.llm_status = self._llm_status()
 
     @staticmethod
-    def _load_sessions() -> Dict[str, Any]:
-        if not SESSIONS_FILE.exists():
-            return {"sessions": []}
-        try:
-            return json.loads(SESSIONS_FILE.read_text(encoding="utf-8"))
-        except Exception:
-            return {"sessions": []}
+    def _firebase_service_account_path() -> Path:
+        raw = (os.getenv("FIREBASE_SERVICE_ACCOUNT") or "").strip()
+        if not raw:
+            return DEFAULT_FIREBASE_SERVICE_ACCOUNT
+        candidate = Path(raw)
+        if candidate.is_absolute():
+            return candidate
+        return (Path(__file__).resolve().parent / candidate).resolve()
 
     @staticmethod
-    def _save_sessions(data: Dict[str, Any]) -> None:
-        SESSIONS_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    def _now_utc() -> datetime:
+        return datetime.now(timezone.utc)
 
-    def _get_session_ref(self, session_id: str) -> Optional[Dict[str, Any]]:
-        store = self._load_sessions()
-        sessions = store.get("sessions", [])
-        session = next((s for s in sessions if s.get("id") == session_id), None)
-        if not session:
-            return None
-        return {"store": store, "session": session}
+    @staticmethod
+    def _to_iso(value: Any) -> str:
+        if isinstance(value, datetime):
+            dt = value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+            return dt.isoformat()
+        return str(value or "")
+
+    @staticmethod
+    def _where_equals(query: Any, field_name: str, value: Any) -> Any:
+        if FieldFilter is None:
+            return query.where(field_name, "==", value)
+        return query.where(filter=FieldFilter(field_name, "==", value))
+
+    def _init_firestore(self):
+        if (
+            firebase_admin is None
+            or firebase_credentials is None
+            or firebase_firestore is None
+        ):
+            raise RuntimeError(
+                "Firestore dependencies are missing. Install firebase-admin in the backend environment."
+            )
+
+        key_path = self._firebase_service_account_path()
+        if not key_path.exists():
+            raise RuntimeError(f"Firestore service account key not found at {key_path}")
+
+        try:
+            apps = getattr(firebase_admin, "_apps", None)
+            if not apps:
+                cred = firebase_credentials.Certificate(str(key_path))
+                firebase_admin.initialize_app(cred)
+
+            client = firebase_firestore.client()
+            # Probe once so startup fails fast when Firestore DB is not reachable.
+            next(client.collection("medvani_probe").limit(1).stream(), None)
+            return client
+        except Exception as exc:
+            raise RuntimeError(f"Firestore initialization failed: {exc}") from exc
 
     def list_sessions(self, user_id: str) -> List[SessionSummary]:
-        store = self._load_sessions()
-        sessions = [s for s in store.get("sessions", []) if s.get("user_id") == user_id]
-        sessions.sort(key=lambda x: x.get("updated_at", ""), reverse=True)
-        out = []
-        for s in sessions:
+        docs = (
+            self._where_equals(
+                self.firestore.collection("sessions"),
+                "user_id",
+                user_id,
+            ).stream()
+        )
+        out: List[SessionSummary] = []
+        for doc in docs:
+            data = doc.to_dict() or {}
             out.append(
                 SessionSummary(
-                    id=s["id"],
-                    title=s.get("title", "New chat"),
-                    updated_at=s.get("updated_at", ""),
+                    id=doc.id,
+                    title=data.get("title", "New chat"),
+                    updated_at=self._to_iso(data.get("updated_at")),
                 )
             )
+        out.sort(key=lambda item: item.updated_at, reverse=True)
         return out
 
     def new_session(self, user_id: str) -> SessionSummary:
-        store = self._load_sessions()
-        sessions = store.setdefault("sessions", [])
-        existing = next(
-            (
-                s
-                for s in sessions
-                if s.get("user_id") == user_id
-                and s.get("title", "New chat") == "New chat"
-                and len(s.get("messages", [])) == 0
-            ),
-            None,
+        docs = (
+            self._where_equals(
+                self.firestore.collection("sessions"),
+                "user_id",
+                user_id,
+            ).stream()
         )
-        if existing:
-            return SessionSummary(
-                id=existing["id"],
-                title=existing.get("title", "New chat"),
-                updated_at=existing.get("updated_at", ""),
-            )
+        for doc in docs:
+            data = doc.to_dict() or {}
+            title = data.get("title", "New chat")
+            count = int(data.get("message_count", 0) or 0)
+            if title == "New chat" and count == 0:
+                return SessionSummary(
+                    id=doc.id,
+                    title="New chat",
+                    updated_at=self._to_iso(data.get("updated_at")),
+                )
 
         session_id = str(uuid4())
-        now = datetime.now(timezone.utc).isoformat()
-        item = {
-            "id": session_id,
-            "user_id": user_id,
-            "title": "New chat",
-            "updated_at": now,
-            "messages": [],
-        }
-        sessions.insert(0, item)
-        self._save_sessions(store)
-        return SessionSummary(id=session_id, title=item["title"], updated_at=now)
+        now = self._now_utc()
+        self.firestore.collection("sessions").document(session_id).set(
+            {
+                "user_id": user_id,
+                "title": "New chat",
+                "updated_at": now,
+                "created_at": now,
+                "message_count": 0,
+            }
+        )
+        return SessionSummary(
+            id=session_id,
+            title="New chat",
+            updated_at=now.isoformat(),
+        )
 
     def delete_session(self, session_id: str, user_id: str) -> None:
-        store = self._load_sessions()
-        store["sessions"] = [
-            s
-            for s in store.get("sessions", [])
-            if not (s.get("id") == session_id and s.get("user_id") == user_id)
-        ]
-        self._save_sessions(store)
+        session_ref = self.firestore.collection("sessions").document(session_id)
+        snapshot = session_ref.get()
+        if not snapshot.exists:
+            return
+        data = snapshot.to_dict() or {}
+        if data.get("user_id") != user_id:
+            return
+
+        for msg_doc in session_ref.collection("messages").stream():
+            msg_doc.reference.delete()
+
+        session_ref.delete()
 
     def _upsert_session_message(
         self, session_id: str, user_id: str, user_text: str, assistant_text: str
     ) -> None:
-        store = self._load_sessions()
-        sessions = store.setdefault("sessions", [])
-        now = datetime.now(timezone.utc).isoformat()
-        target = next(
-            (s for s in sessions if s.get("id") == session_id and s.get("user_id") == user_id),
-            None,
-        )
-        if target is None:
-            target = {
-                "id": session_id,
-                "user_id": user_id,
-                "title": "New chat",
-                "updated_at": now,
-                "messages": [],
-            }
-            sessions.insert(0, target)
-        target["updated_at"] = now
-        target.setdefault("messages", []).append(
+        now = self._now_utc()
+        session_ref = self.firestore.collection("sessions").document(session_id)
+        snapshot = session_ref.get()
+
+        if snapshot.exists:
+            current = snapshot.to_dict() or {}
+            existing_user_id = current.get("user_id")
+            if existing_user_id and existing_user_id != user_id:
+                logger.warning(
+                    "Ignoring write to session '%s' for mismatched user.",
+                    session_id,
+                )
+                return
+        else:
+            session_ref.set(
+                {
+                    "user_id": user_id,
+                    "title": "New chat",
+                    "updated_at": now,
+                    "created_at": now,
+                    "message_count": 0,
+                }
+            )
+
+        session_ref.collection("messages").add(
             {
                 "at": now,
                 "user": user_text,
                 "assistant": assistant_text,
             }
         )
-        self._save_sessions(store)
+
+        updates: Dict[str, Any] = {"updated_at": now}
+        increment = (
+            getattr(firebase_firestore, "Increment", None)
+            if firebase_firestore is not None
+            else None
+        )
+        if increment is not None:
+            updates["message_count"] = increment(1)
+        else:
+            base_count = 0
+            if snapshot.exists:
+                base_count = int((snapshot.to_dict() or {}).get("message_count", 0) or 0)
+            updates["message_count"] = base_count + 1
+
+        session_ref.set(updates, merge=True)
 
     def get_session_detail(self, session_id: str, user_id: str) -> Optional[SessionDetail]:
-        store = self._load_sessions()
-        target = next(
-            (s for s in store.get("sessions", []) if s.get("id") == session_id and s.get("user_id") == user_id),
-            None,
-        )
-        if not target:
+        session_ref = self.firestore.collection("sessions").document(session_id)
+        snapshot = session_ref.get()
+        if not snapshot.exists:
             return None
-        rows = target.get("messages", [])
+
+        data = snapshot.to_dict() or {}
+        if data.get("user_id") != user_id:
+            return None
+
+        rows = session_ref.collection("messages").order_by("at").stream()
         messages: List[SessionMessage] = []
-        for row in rows:
-            at = row.get("at", "")
+        for row_doc in rows:
+            row = row_doc.to_dict() or {}
+            at = self._to_iso(row.get("at"))
             messages.append(SessionMessage(role="user", text=row.get("user", ""), at=at))
             messages.append(
                 SessionMessage(role="assistant", text=row.get("assistant", ""), at=at)
             )
+
         return SessionDetail(
-            id=target.get("id", ""),
-            title=target.get("title", "New chat"),
-            updated_at=target.get("updated_at", ""),
+            id=snapshot.id,
+            title=data.get("title", "New chat"),
+            updated_at=self._to_iso(data.get("updated_at")),
             messages=messages,
         )
 
     def _session_title(self, session_id: str) -> str:
-        ref = self._get_session_ref(session_id)
-        if not ref:
+        snapshot = self.firestore.collection("sessions").document(session_id).get()
+        if not snapshot.exists:
             return "New chat"
-        return ref["session"].get("title", "New chat")
+        return (snapshot.to_dict() or {}).get("title", "New chat")
 
     def _needs_title_generation(self, session_id: str) -> bool:
-        ref = self._get_session_ref(session_id)
-        if not ref:
+        session_ref = self.firestore.collection("sessions").document(session_id)
+        snapshot = session_ref.get()
+        if not snapshot.exists:
             return True
-        s = ref["session"]
-        return s.get("title", "New chat") == "New chat" and len(s.get("messages", [])) <= 1
+
+        data = snapshot.to_dict() or {}
+        if data.get("title", "New chat") != "New chat":
+            return False
+
+        count = data.get("message_count")
+        if count is None:
+            rows = list(session_ref.collection("messages").limit(2).stream())
+            return len(rows) <= 1
+        return int(count) <= 1
 
     def _generate_title(self, prompt: str) -> str:
         fallback = truncate_title(prompt)
@@ -386,17 +488,21 @@ class MedVaniService:
 
     def update_session_title_from_prompt(self, session_id: str, prompt: str) -> None:
         title = self._generate_title(prompt)
-        store = self._load_sessions()
-        sessions = store.setdefault("sessions", [])
-        now = datetime.now(timezone.utc).isoformat()
-        target = next((s for s in sessions if s.get("id") == session_id), None)
-        if not target:
+
+        session_ref = self.firestore.collection("sessions").document(session_id)
+        snapshot = session_ref.get()
+        if not snapshot.exists:
             return
-        if target.get("title", "New chat") != "New chat":
+        data = snapshot.to_dict() or {}
+        if data.get("title", "New chat") != "New chat":
             return
-        target["title"] = title
-        target["updated_at"] = now
-        self._save_sessions(store)
+        session_ref.set(
+            {
+                "title": title,
+                "updated_at": self._now_utc(),
+            },
+            merge=True,
+        )
 
     @staticmethod
     def _init_groq():
@@ -670,6 +776,8 @@ def health() -> Dict[str, Any]:
         "llm_status": svc.llm_status,
         "groq_key_present": bool(os.getenv("GROQ_API_KEY")),
         "sarvam_initialized": svc.sarvam is not None,
+        "session_backend": svc.sessions_backend,
+        "firestore_initialized": svc.firestore is not None,
         "python_executable": sys.executable,
     }
 

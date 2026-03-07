@@ -39,7 +39,7 @@ class VectorService:
         if not raw or AESGCM is None:
             return None
         try:
-            key = base64.b64decode(raw)
+            key = base64.urlsafe_b64decode(raw + "==")
         except Exception:
             key = raw.encode("utf-8")
         return key if len(key) == 32 else None

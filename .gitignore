@@ -28,6 +28,7 @@ env/
 .env.*.local
 backend/.env
 frontend/.env
+backend/firebase_service_account.json
 
 # Keep example env files trackable
 !.env.example

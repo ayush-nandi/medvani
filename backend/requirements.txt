@@ -9,7 +9,10 @@ groq>=0.18.0
 sarvamai>=0.1.0
 
 # Pinecone
-pinecone-client>=4.1.2
+pinecone>=6.0.0
 
 # Encryption
 cryptography>=44.0.0
+
+# Firebase (session database)
+firebase-admin>=6.7.0
