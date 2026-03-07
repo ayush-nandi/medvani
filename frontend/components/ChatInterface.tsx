@@ -59,11 +59,21 @@ type SessionDetailApi = {
   messages: Array<{ role: "user" | "assistant"; text: string; at: string }>;
 };
 
+type SpeechRecognitionAlternative = { transcript: string };
+type SpeechRecognitionResultLike = {
+  isFinal?: boolean;
+  [index: number]: SpeechRecognitionAlternative | undefined;
+};
+type SpeechRecognitionEventLike = {
+  resultIndex?: number;
+  results: ArrayLike<SpeechRecognitionResultLike>;
+};
+
 type SpeechRecognitionCtor = new () => {
   lang: string;
   continuous: boolean;
   interimResults: boolean;
-  onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
   onerror: ((event: { error: string }) => void) | null;
   onend: (() => void) | null;
   start: () => void;
@@ -103,6 +113,15 @@ export default function ChatInterface() {
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const speechRef = useRef<InstanceType<SpeechRecognitionCtor> | null>(null);
+  const speechShouldRunRef = useRef(false);
+  const voiceModeRef = useRef<"speech" | "fallback" | null>(null);
+  const voiceInputBaseRef = useRef("");
+  const speechCommittedRef = useRef("");
+  const fallbackCodecRef = useRef("audio/webm");
+  const fallbackTranscriptRef = useRef("");
+  const fallbackRequestSeqRef = useRef(0);
+  const fallbackAppliedSeqRef = useRef(0);
+  const fallbackTranscribeTasksRef = useRef<Set<Promise<void>>>(new Set());
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const [input, setInput] = useState("");
   const [media, setMedia] = useState<MediaAttachment[]>([]);
@@ -336,20 +355,93 @@ export default function ChatInterface() {
     }
   }
 
+  async function transcribeAudioChunk(
+    chunk: Blob,
+    options?: { replaceInput?: boolean; finalPass?: boolean },
+  ) {
+    if (!chunk || chunk.size === 0) return;
+    const replaceInput = options?.replaceInput ?? false;
+    const finalPass = options?.finalPass ?? false;
+    const requestSeq = replaceInput ? (fallbackRequestSeqRef.current += 1) : 0;
+
+    try {
+      const audioBase64 = await blobToBase64(chunk);
+      const res = await fetch(`${API_BASE}/stt-tts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mode: "stt",
+          audio_base64: audioBase64,
+          audio_codec: chunk.type || fallbackCodecRef.current,
+        }),
+      });
+      const data = (await res.json()) as {
+        text?: string;
+        detected_lang?: string;
+        detail?: string;
+      };
+      if (!res.ok) {
+        throw new Error(data.detail || "Voice transcription failed.");
+      }
+
+      const text = (data.text || "").trim();
+      if (replaceInput) {
+        if (requestSeq < fallbackAppliedSeqRef.current) return;
+        fallbackAppliedSeqRef.current = requestSeq;
+        fallbackTranscriptRef.current = text;
+        const combined = `${voiceInputBaseRef.current} ${text}`.replace(/\s+/g, " ").trim();
+        setInput(combined);
+      } else if (text) {
+        setInput((prev) => `${prev} ${text}`.replace(/\s+/g, " ").trim());
+      }
+      if (language === "auto" && data.detected_lang) {
+        setLanguage(normalizeUiLanguage(data.detected_lang));
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Voice transcription failed.";
+      if (!finalPass && replaceInput && /audio format|read (the )?file/i.test(message)) {
+        // Ignore transient rolling parse errors and rely on final pass on stop.
+        return;
+      }
+      setVoiceError(message);
+    }
+  }
+
   async function startVoiceRecording() {
-    if (voiceBusy) return;
+    if (voiceBusy || recording) return;
     setVoiceError("");
+    setVoiceBusy(true);
+    voiceInputBaseRef.current = input.trim();
+    speechCommittedRef.current = "";
+    fallbackTranscriptRef.current = "";
+    fallbackRequestSeqRef.current = 0;
+    fallbackAppliedSeqRef.current = 0;
 
     const startBackendRecordingCapture = async () => {
+      if (typeof MediaRecorder === "undefined") {
+        throw new Error("This browser does not support in-app realtime recording.");
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaStreamRef.current = stream;
       audioChunksRef.current = [];
       const recorder = new MediaRecorder(stream);
+      fallbackCodecRef.current = recorder.mimeType || "audio/webm";
       recorder.ondataavailable = (event: BlobEvent) => {
-        if (event.data.size > 0) audioChunksRef.current.push(event.data);
+        if (event.data.size <= 0) return;
+        audioChunksRef.current.push(event.data);
+        const rollingBlob = new Blob(audioChunksRef.current, {
+          type: recorder.mimeType || event.data.type || fallbackCodecRef.current,
+        });
+        const task = transcribeAudioChunk(rollingBlob, { replaceInput: true });
+        fallbackTranscribeTasksRef.current.add(task);
+        void task.finally(() => {
+          fallbackTranscribeTasksRef.current.delete(task);
+        });
       };
-      recorder.start();
+      recorder.start(1400);
       mediaRecorderRef.current = recorder;
+      voiceModeRef.current = "fallback";
       setRecording(true);
       setVoiceBusy(false);
     };
@@ -363,19 +455,36 @@ export default function ChatInterface() {
       try {
         const rec = new SpeechCtor();
         rec.lang = language === "auto" ? "en-IN" : language;
-        rec.continuous = false;
-        rec.interimResults = false;
+        rec.continuous = true;
+        rec.interimResults = true;
+
         rec.onresult = (event) => {
-          const transcript = event.results?.[0]?.[0]?.transcript?.trim() ?? "";
-          if (transcript) {
-            setInput((prev) => (prev ? `${prev} ${transcript}` : transcript));
+          const resultIndex = event.resultIndex ?? 0;
+          let committed = speechCommittedRef.current;
+          let interim = "";
+
+          for (let i = resultIndex; i < event.results.length; i += 1) {
+            const result = event.results[i];
+            const text = result?.[0]?.transcript?.trim() ?? "";
+            if (!text) continue;
+            if (result?.isFinal) {
+              committed = `${committed} ${text}`.replace(/\s+/g, " ").trim();
+            } else {
+              interim = `${interim} ${text}`.replace(/\s+/g, " ").trim();
+            }
           }
+
+          speechCommittedRef.current = committed;
+          const combined = `${voiceInputBaseRef.current} ${committed} ${interim}`
+            .replace(/\s+/g, " ")
+            .trim();
+          setInput(combined);
         };
+
         rec.onerror = (event) => {
-          // Chrome speech service can throw "network" even with a valid mic.
-          // Fall back to backend STT recording path automatically.
           if (event.error === "network") {
-            setVoiceError("Browser voice service unavailable. Falling back to in-app recording.");
+            setVoiceError("Browser voice service unavailable. Using in-app realtime transcription.");
+            speechShouldRunRef.current = false;
             speechRef.current = null;
             setRecording(false);
             setVoiceBusy(true);
@@ -387,78 +496,102 @@ export default function ChatInterface() {
           }
           setVoiceError(`Voice recognition error: ${event.error}`);
         };
+
         rec.onend = () => {
+          if (voiceModeRef.current !== "speech") return;
+          if (speechShouldRunRef.current) {
+            try {
+              rec.start();
+              return;
+            } catch {
+              // fall through to cleanup
+            }
+          }
           setRecording(false);
           setVoiceBusy(false);
           speechRef.current = null;
+          voiceModeRef.current = null;
         };
+
         speechRef.current = rec;
+        speechShouldRunRef.current = true;
+        voiceModeRef.current = "speech";
         setRecording(true);
-        setVoiceBusy(true);
+        setVoiceBusy(false);
         rec.start();
         return;
       } catch {
-        // fall back to backend STT recording path
+        // fall through to backend realtime transcription
       }
     }
 
     try {
+      if (!SpeechCtor) {
+        setVoiceError("Browser speech service unavailable. Using in-app realtime transcription.");
+      }
       await startBackendRecordingCapture();
     } catch {
+      setVoiceBusy(false);
       setVoiceError("Microphone access denied or unavailable.");
     }
   }
 
   async function stopVoiceRecording() {
+    setVoiceError("");
+
     if (speechRef.current) {
+      speechShouldRunRef.current = false;
+      voiceModeRef.current = null;
+      const rec = speechRef.current;
+      speechRef.current = null;
+      setRecording(false);
+      setVoiceBusy(true);
       try {
-        speechRef.current.stop();
+        rec.stop();
       } catch {
         // ignore stop errors
+      } finally {
+        setVoiceBusy(false);
       }
       return;
     }
 
     const recorder = mediaRecorderRef.current;
-    if (!recorder || !user) return;
+    if (!recorder) return;
     setVoiceBusy(true);
     setRecording(false);
 
-    await new Promise<void>((resolve) => {
-      recorder.onstop = () => resolve();
-      recorder.stop();
-    });
-
-    mediaStreamRef.current?.getTracks().forEach((t) => t.stop());
-    mediaStreamRef.current = null;
-    mediaRecorderRef.current = null;
-
     try {
-      const blob = new Blob(audioChunksRef.current, { type: "audio/webm" });
-      const audioBase64 = await blobToBase64(blob);
-      const res = await fetch(`${API_BASE}/stt-tts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          mode: "stt",
-          audio_base64: audioBase64,
-        }),
+      if (recorder.state === "recording") {
+        try {
+          recorder.requestData();
+        } catch {
+          // ignore requestData errors
+        }
+      }
+
+      await new Promise<void>((resolve) => {
+        recorder.onstop = () => resolve();
+        recorder.stop();
       });
-      const data = (await res.json()) as { text?: string; detected_lang?: string; detail?: string };
-      if (!res.ok) {
-        throw new Error(data.detail || "Voice transcription failed.");
+
+      await Promise.all(Array.from(fallbackTranscribeTasksRef.current));
+
+      if (audioChunksRef.current.length > 0) {
+        const finalBlob = new Blob(audioChunksRef.current, {
+          type: fallbackCodecRef.current,
+        });
+        await transcribeAudioChunk(finalBlob, { replaceInput: true, finalPass: true });
       }
-      if (data.text) {
-        setInput((prev) => (prev ? `${prev} ${data.text}` : data.text || ""));
-      }
-      if (language === "auto" && data.detected_lang) {
-        setLanguage(normalizeUiLanguage(data.detected_lang));
-      }
-    } catch (err: unknown) {
-      setVoiceError(err instanceof Error ? err.message : "Voice transcription failed.");
     } finally {
-      setVoiceBusy(false);
+      mediaStreamRef.current?.getTracks().forEach((t) => t.stop());
+      mediaStreamRef.current = null;
+      mediaRecorderRef.current = null;
       audioChunksRef.current = [];
+      fallbackTranscriptRef.current = "";
+      fallbackTranscribeTasksRef.current.clear();
+      voiceModeRef.current = null;
+      setVoiceBusy(false);
     }
   }
 
@@ -549,7 +682,7 @@ export default function ChatInterface() {
               className={`rounded-full p-2 ${
                 recording ? "bg-red-500 text-black" : "text-zinc-300 hover:bg-zinc-700 hover:text-white"
               } ${voiceBusy ? "cursor-not-allowed opacity-60" : ""}`}
-              disabled={voiceBusy}
+              disabled={voiceBusy && !recording}
               title={recording ? "Stop recording" : "Start voice input"}
             >
               <Mic size={18} suppressHydrationWarning />

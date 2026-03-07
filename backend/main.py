@@ -86,6 +86,105 @@ VALID_SARVAM_MODELS = {
 DEFAULT_SARVAM_STT_MODEL = "saarika:v2.5"
 DEFAULT_SARVAM_TTS_MODEL = "saaras:v3"
 
+VALID_AUDIO_CODECS = {
+    "wav",
+    "x-wav",
+    "wave",
+    "mp3",
+    "mpeg",
+    "mpeg3",
+    "x-mp3",
+    "x-mpeg-3",
+    "aac",
+    "x-aac",
+    "aiff",
+    "x-aiff",
+    "ogg",
+    "opus",
+    "flac",
+    "x-flac",
+    "mp4",
+    "x-m4a",
+    "amr",
+    "x-ms-wma",
+    "webm",
+    "pcm_s16le",
+    "pcm_l16",
+    "pcm_raw",
+}
+
+MIME_TO_AUDIO_CODEC = {
+    "audio/webm": "webm",
+    "audio/ogg": "ogg",
+    "audio/opus": "opus",
+    "audio/wav": "wav",
+    "audio/x-wav": "x-wav",
+    "audio/wave": "wave",
+    "audio/mpeg": "mpeg",
+    "audio/mp3": "mp3",
+    "audio/aac": "aac",
+    "audio/flac": "flac",
+    "audio/x-flac": "x-flac",
+    "audio/mp4": "mp4",
+    "audio/x-m4a": "x-m4a",
+    "audio/amr": "amr",
+    "audio/x-ms-wma": "x-ms-wma",
+}
+
+CODEC_TO_FILE_EXT = {
+    "wav": "wav",
+    "x-wav": "wav",
+    "wave": "wav",
+    "mp3": "mp3",
+    "mpeg": "mp3",
+    "mpeg3": "mp3",
+    "x-mp3": "mp3",
+    "x-mpeg-3": "mp3",
+    "aac": "aac",
+    "x-aac": "aac",
+    "aiff": "aiff",
+    "x-aiff": "aiff",
+    "ogg": "ogg",
+    "opus": "opus",
+    "flac": "flac",
+    "x-flac": "flac",
+    "mp4": "mp4",
+    "x-m4a": "m4a",
+    "amr": "amr",
+    "x-ms-wma": "wma",
+    "webm": "webm",
+    "pcm_s16le": "pcm",
+    "pcm_l16": "pcm",
+    "pcm_raw": "pcm",
+}
+
+CODEC_TO_MIME = {
+    "wav": "audio/wav",
+    "x-wav": "audio/x-wav",
+    "wave": "audio/wave",
+    "mp3": "audio/mpeg",
+    "mpeg": "audio/mpeg",
+    "mpeg3": "audio/mpeg",
+    "x-mp3": "audio/mp3",
+    "x-mpeg-3": "audio/mp3",
+    "aac": "audio/aac",
+    "x-aac": "audio/aac",
+    "aiff": "audio/aiff",
+    "x-aiff": "audio/x-aiff",
+    "ogg": "audio/ogg",
+    "opus": "audio/opus",
+    "flac": "audio/flac",
+    "x-flac": "audio/x-flac",
+    "mp4": "audio/mp4",
+    "x-m4a": "audio/x-m4a",
+    "amr": "audio/amr",
+    "x-ms-wma": "audio/x-ms-wma",
+    "webm": "audio/webm",
+    "pcm_s16le": "audio/pcm",
+    "pcm_l16": "audio/pcm",
+    "pcm_raw": "audio/pcm",
+}
+
 
 def _safe_sarvam_model(env_key: str, default: str) -> str:
     configured = (os.getenv(env_key) or "").strip()
@@ -163,6 +262,25 @@ def normalize_language_code(code: Optional[str], fallback: str = "en-IN") -> str
     return fallback
 
 
+def normalize_audio_codec(value: Optional[str]) -> Optional[str]:
+    raw = (value or "").strip().lower()
+    if not raw:
+        return None
+    base = raw.split(";", 1)[0].strip()
+    codec = MIME_TO_AUDIO_CODEC.get(base, base)
+    return codec if codec in VALID_AUDIO_CODECS else None
+
+
+def safe_stt_error_message(exc: Exception) -> str:
+    msg = str(exc)
+    lower = msg.lower()
+    if "failed to read the file" in lower or "check the audio format" in lower:
+        return "Unable to read recorded audio format. Try Chrome/Edge and allow microphone access."
+    if "invalid_request_error" in lower and "model" in lower:
+        return "STT request model was rejected by provider."
+    return "Speech-to-text request failed. Check backend logs for details."
+
+
 class MediaInput(BaseModel):
     kind: Literal["text", "image", "video", "audio"]
     content: str = Field(..., description="Text, base64 image/audio, or URL for video")
@@ -198,6 +316,7 @@ class UploadMediaResponse(BaseModel):
 class STTTTSRequest(BaseModel):
     mode: Literal["stt", "tts"]
     audio_base64: Optional[str] = None
+    audio_codec: Optional[str] = None
     text: Optional[str] = None
     source_lang: Optional[str] = None
     target_lang: Optional[str] = None
@@ -718,11 +837,23 @@ class MedVaniService:
                 raise HTTPException(status_code=400, detail="audio_base64 is required for STT")
             try:
                 audio_bytes = base64.b64decode(req.audio_base64)
+                codec = normalize_audio_codec(req.audio_codec)
+                ext = CODEC_TO_FILE_EXT.get(codec or "", "webm")
+                mime = CODEC_TO_MIME.get(codec or "", "audio/webm")
+                file_payload: Any = (
+                    (f"recording.{ext}", audio_bytes, mime)
+                    if codec
+                    else audio_bytes
+                )
+                stt_kwargs: Dict[str, Any] = {}
+                if codec:
+                    stt_kwargs["input_audio_codec"] = codec
                 stt_model = _safe_sarvam_model("SARVAM_STT_MODEL", DEFAULT_SARVAM_STT_MODEL)
                 try:
                     out = self.sarvam.speech_to_text.transcribe(
-                        file=audio_bytes,
+                        file=file_payload,
                         model=stt_model,
+                        **stt_kwargs,
                     )
                 except Exception as model_exc:
                     err = str(model_exc)
@@ -731,8 +862,9 @@ class MedVaniService:
                         and ("invalid_request_error" in err or "body model" in err.lower())
                     ):
                         out = self.sarvam.speech_to_text.transcribe(
-                            file=audio_bytes,
+                            file=file_payload,
                             model=DEFAULT_SARVAM_STT_MODEL,
+                            **stt_kwargs,
                         )
                     else:
                         raise
@@ -740,7 +872,10 @@ class MedVaniService:
                 detected = self.detect_language(text)
                 return STTTTSResponse(text=text, detected_lang=detected)
             except Exception as exc:
-                raise HTTPException(status_code=500, detail=f"STT failed: {exc}") from exc
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"STT failed: {safe_stt_error_message(exc)}",
+                ) from exc
 
         if not req.text:
             raise HTTPException(status_code=400, detail="text is required for TTS")
