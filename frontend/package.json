@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "node scripts/patch-node-types.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -18,7 +19,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@types/node": "22.13.1",
+    "@types/node": "22.13.14",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "autoprefixer": "10.4.20",
