@@ -3,6 +3,7 @@ import importlib
 import logging
 import os
 import sys
+import warnings
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
@@ -21,6 +22,13 @@ except ModuleNotFoundError:  # pragma: no cover
     Groq = None
 
 try:  # pragma: no cover
+    # Sarvam currently imports pydantic.v1 internals that warn on Python 3.14+.
+    warnings.filterwarnings(
+        "ignore",
+        message=r"Core Pydantic V1 functionality isn't compatible with Python 3\.14 or greater\.",
+        category=UserWarning,
+        module=r"sarvamai\.core\.pydantic_utilities",
+    )
     _sarvam_module = importlib.import_module("sarvamai")
     SarvamAI = getattr(_sarvam_module, "SarvamAI", None)
 except ModuleNotFoundError:  # pragma: no cover
